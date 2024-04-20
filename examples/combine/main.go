@@ -26,16 +26,16 @@ func main() {
 	sx := ut.Cobineshader()
 	fogs := ut.Fog{}
 	fogs.SetCombineShader(&sx)
-	fogs.Init(rl.Blue, 0.16, true)
+	fogs.Init(rl.Blue, 0.16)
 
 	l := ut.Light{}
 	l.SetCombineShader(&sx)
-	l.Init(0.2, rl.Vector3{1, 1, 1}, true)
-	l1 := l.NewLight(ut.LightTypePoint, rl.Vector3{0, 3, 0}, rl.Vector3{}, rl.Yellow, 2, &l.Shader)
+	l.Init(0.2, rl.Vector3{1, 1, 1})
+	l1 := l.NewLight(ut.LightTypePoint, rl.Vector3{0, 3, 0}, rl.Vector3{}, rl.Yellow, 2,&l.Shader)
 	
 	p := ut.PhysicRender{}
 	p.SetCombineShader(&sx)
-	p.Init(true)
+	p.Init()
 	p.MetallicValue(0.3)
 	p.RoughnessValue(0.1)
 	p.AmbientColor(rl.Vector3{1, 1, 1}, 0.2)

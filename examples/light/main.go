@@ -25,7 +25,7 @@ func main() {
 
 	
 	light := ut.Light{}
-	light.Init(0.5,rl.Vector3{1,1,1}, false)
+	light.Init(0.5,rl.Vector3{1,1,1})
 	lighshape := light.NewLight(ut.LightTypeDirectional,rl.Vector3{2,3,0},rl.Vector3{0,2,0},rl.Yellow,1,&light.Shader)
 	
 	cube.Materials[0].Shader = light.Shader

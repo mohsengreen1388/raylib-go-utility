@@ -3,7 +3,6 @@ package utility
 import (
 	"fmt"
 	rl "github.com/mohsengreen1388/raylib-go-custom/raylib"
-	sh "github.com/mohsengreen1388/raylib-go-utility/utility/shaders"
 	"unsafe"
 )
 
@@ -16,20 +15,21 @@ const (
 )
 
 type Light struct {
-	Shader      rl.Shader
-	lightType   LightType
-	position    rl.Vector3
-	direction   rl.Vector3
-	lightColor  rl.Color
-	enabled     int32
-	enargy      float32
-	cutOff      float32
-	outerCutOff float32
-	constant    float32
-	linear      float32
-	quadratic   float32
-	shiny       float32
-	specularStr float32
+	Shader        rl.Shader
+	combineStatus bool
+	lightType     LightType
+	position      rl.Vector3
+	direction     rl.Vector3
+	lightColor    rl.Color
+	enabled       int32
+	enargy        float32
+	cutOff        float32
+	outerCutOff   float32
+	constant      float32
+	linear        float32
+	quadratic     float32
+	shiny         float32
+	specularStr   float32
 	// shader locations
 	enabledLoc     int32
 	typeLoc        int32
@@ -54,8 +54,7 @@ func (lt *Light) NewLight(
 	lightType LightType,
 	position, direction rl.Vector3,
 	color rl.Color,
-	enargy float32,
-	shader *rl.Shader) Light {
+	enargy float32,shader *rl.Shader) Light {
 
 	light := Light{
 		Shader: *shader,
@@ -166,8 +165,8 @@ func (lt *Light) SetFlashlightTexture(materials []*rl.Material, texure *rl.Textu
 	}
 }
 
-func (lt *Light) Init(ambientStrength float32, ambientColor rl.Vector3, combineStatus bool) {
-	if !combineStatus {
+func (lt *Light) Init(ambientStrength float32, ambientColor rl.Vector3) {
+	if !lt.combineStatus {
 		lt.configShader()
 	}
 	lt.viewPosLoc = rl.GetShaderLocation(lt.Shader, "viewPos")
@@ -198,7 +197,6 @@ func (lt *Light) UpdateReflect(cameraPos rl.Vector3) {
 }
 
 func (lt *Light) configShader() {
-	ShaderFile := sh.NewShader()
 	if checkPlatformIsMobail() {
 		lt.Shader = rl.LoadShaderFromMemory(ShaderFile.Mobail["lightVs"], ShaderFile.Mobail["lightFs"])
 	} else {
@@ -208,6 +206,7 @@ func (lt *Light) configShader() {
 
 // exce before init or set manually
 func (lt *Light) SetCombineShader(CombineShader *rl.Shader) {
+	lt.combineStatus = true
 	lt.Shader = *CombineShader
 }
 

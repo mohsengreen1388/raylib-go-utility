@@ -3,7 +3,6 @@ package utility
 import (
 	"fmt"
 	rl "github.com/mohsengreen1388/raylib-go-custom/raylib"
-	//sh "github.com/mohsengreen1388/raylib-go-utility/utility/shaders"
 )
 
 const (
@@ -29,13 +28,14 @@ type light struct {
 }
 
 type PhysicRender struct {
-	Shader *rl.Shader
+	Shader        *rl.Shader
+	combineStatus bool
 }
 
 // make light and pbr Shader
-func (ph *PhysicRender) Init(combineStatus bool) {
+func (ph *PhysicRender) Init() {
 
-	if !combineStatus {
+	if !ph.combineStatus {
 		ph.configShader()
 	}
 
@@ -201,6 +201,7 @@ func (ph *PhysicRender) configShader() {
 
 // exce before init or set manually
 func (ph *PhysicRender) SetCombineShader(CombineShader *rl.Shader) {
+	ph.combineStatus = true
 	ph.Shader = CombineShader
 }
 

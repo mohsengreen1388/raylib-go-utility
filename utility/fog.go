@@ -6,13 +6,14 @@ import (
 
 type Fog struct {
 	Shader        *rl.Shader
+	combineStatus bool
 	FogDensity    float32
 	fogDensityLoc int32
 }
 
 // fogDensity 0.0 -> 0.16
-func (fo *Fog) Init(ambient rl.Color, fogDensity float32, combineStatus bool) {
-	if !combineStatus {
+func (fo *Fog) Init(ambient rl.Color, fogDensity float32) {
+	if !fo.combineStatus {
 		fo.configShader()
 	}
 	fo.updateUniformInTheShader(ambient, fogDensity)
@@ -57,6 +58,7 @@ func (fo *Fog) configShader() {
 
 // exce before init or set manually
 func (fo *Fog) SetCombineShader(CombineShader *rl.Shader) {
+	fo.combineStatus = true
 	fo.Shader = CombineShader
 }
 

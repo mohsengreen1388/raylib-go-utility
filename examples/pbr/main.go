@@ -24,7 +24,7 @@ func main() {
 	cam.Up = rl.Vector3{0, 1, 0}
 
 	physic := ut.PhysicRender{}
-	physic.Init(false)
+	physic.Init()
 	physic.MetallicValue(0.3)
 	physic.RoughnessValue(0.1)
 

@@ -25,7 +25,7 @@ func main() {
 
 
 	fogs := ut.Fog{}
-	fogs.Init(rl.Blue, 0.16, false)
+	fogs.Init(rl.Blue, 0.16)
 	fogs.AddTheMaterialToFog([]*rl.Material{&cube.Materials[0]},[]*rl.Texture2D{&tx})
 
 	cube.Materials[0].Shader = *fogs.Shader
