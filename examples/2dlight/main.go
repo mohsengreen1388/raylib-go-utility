@@ -14,7 +14,7 @@ func main() {
 
 	rl.InitWindow(screenWidth, screenHeight, "raylib [shaders] example - basic lighting")
 
-	lightx := ut.Lights{}
+	lightx := ut.Lights2d{}
 	lightx.SpotLightInit(float32(123.2), float32(0.9), rl.Black)
 	lighttx := rl.LoadTexture("./x.png")
 	tx1 := rl.LoadTexture("./fudesumi.png")

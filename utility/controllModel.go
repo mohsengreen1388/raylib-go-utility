@@ -114,9 +114,6 @@ func (con *ControllerModel) GetStatusEnableDefaultAnimtion() bool {
 func (con *ControllerModel) FrameCountRest() {
 	con.CounterFrame = 0
 }
-func CheckCollision(){
-	//rl.CheckCollisionBoxes()
-}
 
 func (con *ControllerModel) Unload() {
 	rl.UnloadModel(*con.Model)
