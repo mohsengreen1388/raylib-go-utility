@@ -1,0 +1,4 @@
+github.com/mohsengreen1388/raylib-go-custom v1.0.0 h1:17f8QjjMLg66xjEudQmmlnRUqhuM3tZpRZ1hMB3cFcM=
+github.com/mohsengreen1388/raylib-go-custom v1.0.0/go.mod h1:qZXRqD8+4TBg0PjyQjSNmu+g+Hmi+U2BI5Vn+vfEQVc=
+github.com/mohsengreen1388/raylib-go-custom/raylib v0.0.0-20240325112553-e58577f53843 h1:6Hw5QnNRmypkrwWfbRxvBI9l0VTGL4u9uXk+RTOOIcw=
+github.com/mohsengreen1388/raylib-go-custom/raylib v0.0.0-20240325112553-e58577f53843/go.mod h1:YGrqhWfzW1Aa5NNT34oP21tJZ1ucTB7XXq1/AhkaUCk=
