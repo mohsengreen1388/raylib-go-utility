@@ -28,15 +28,15 @@ func main() {
 	physic.MetallicValue(0.3)
 	physic.RoughnessValue(0.1)
 
-	physic.TextureMapAlbedo(&floar.Materials[0], rl.LoadTexture("./model/road_a.png"))
-	physic.TextureMapMetalness(&floar.Materials[0], rl.LoadTexture("./model/road_mra.png"))
-	physic.TextureMapNormal(&floar.Materials[0], rl.LoadTexture("./model/road_n.png"))
+	physic.TextureMapAlbedo(&floar.GetMaterials()[0], rl.LoadTexture("./model/road_a.png"))
+	physic.TextureMapMetalness(&floar.GetMaterials()[0], rl.LoadTexture("./model/road_mra.png"))
+	physic.TextureMapNormal(&floar.GetMaterials()[0], rl.LoadTexture("./model/road_n.png"))
 
 	l := physic.CreateLight(0, rl.Vector3{-1.0, 1.0, -4.0}, rl.Vector3{0.0, 1.0, -1.0}, rl.Yellow, 4.0)
 	l1 := physic.CreateLight(1, rl.Vector3{0.0, 4.0, -1.0}, rl.Vector3{0.0, 0.0, 0.0}, rl.White, 8.3)
 
-	floar.Materials[0].Shader = *physic.Shader
-	crash.Materials[0].Shader = *physic.Shader
+	floar.GetMaterials()[0].Shader = *physic.Shader
+	crash.GetMaterials()[0].Shader = *physic.Shader
 
 	rl.SetTargetFPS(60)
 	for !rl.WindowShouldClose() {

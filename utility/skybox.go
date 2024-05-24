@@ -16,7 +16,7 @@ func (sky *SkyBox) Init(doGamma, vflipped bool, file string) {
 	Gamma := 0
 	flipped := 0
 
-	SkyBox.Materials[0].Shader = *sky.configShader()
+	SkyBox.GetMaterials()[0].Shader = *sky.configShader()
 
 	if doGamma {
 		Gamma = 1
@@ -25,12 +25,12 @@ func (sky *SkyBox) Init(doGamma, vflipped bool, file string) {
 		flipped = 1
 	}
 
-	rl.SetShaderValue(SkyBox.Materials[0].Shader, rl.GetShaderLocation(SkyBox.Materials[0].Shader, "environmentMap"), sky.convertIntUseForShader(rl.MapCubemap), rl.ShaderUniformInt)
-	rl.SetShaderValue(SkyBox.Materials[0].Shader, rl.GetShaderLocation(SkyBox.Materials[0].Shader, "doGamma"), sky.convertIntUseForShader(Gamma), rl.ShaderUniformInt)
-	rl.SetShaderValue(SkyBox.Materials[0].Shader, rl.GetShaderLocation(SkyBox.Materials[0].Shader, "vflipped"), sky.convertIntUseForShader(flipped), rl.ShaderUniformInt)
+	rl.SetShaderValue(SkyBox.GetMaterials()[0].Shader, rl.GetShaderLocation(SkyBox.GetMaterials()[0].Shader, "environmentMap"), sky.convertIntUseForShader(rl.MapCubemap), rl.ShaderUniformInt)
+	rl.SetShaderValue(SkyBox.GetMaterials()[0].Shader, rl.GetShaderLocation(SkyBox.GetMaterials()[0].Shader, "doGamma"), sky.convertIntUseForShader(Gamma), rl.ShaderUniformInt)
+	rl.SetShaderValue(SkyBox.GetMaterials()[0].Shader, rl.GetShaderLocation(SkyBox.GetMaterials()[0].Shader, "vflipped"), sky.convertIntUseForShader(flipped), rl.ShaderUniformInt)
 
 	img := rl.LoadImage(file)
-	SkyBox.Materials[0].GetMap(rl.MapCubemap).Texture = rl.LoadTextureCubemap(img, rl.CubemapLayoutAutoDetect)
+	SkyBox.GetMaterials()[0].GetMap(rl.MapCubemap).Texture = rl.LoadTextureCubemap(img, rl.CubemapLayoutAutoDetect)
 
 	defer rl.UnloadImage(img)
 }

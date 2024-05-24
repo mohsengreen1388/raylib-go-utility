@@ -36,8 +36,8 @@ func (fo *Fog) AddTheMaterialToFog(models []*rl.Material, textures []*rl.Texture
 
 func (fo *Fog) updateUniformInTheShader(ambient rl.Color, fogDensity float32) {
 
-	fo.Shader.UpdateLocation(rl.RL_SHADER_LOC_MATRIX_MODEL, rl.GetShaderLocation(*fo.Shader, "matModel"))
-	fo.Shader.UpdateLocation(rl.RL_SHADER_LOC_VECTOR_VIEW, rl.GetShaderLocation(*fo.Shader, "viewPos"))
+	fo.Shader.UpdateLocation(rl.ShaderLocMatrixModel, rl.GetShaderLocation(*fo.Shader, "matModel"))
+	fo.Shader.UpdateLocation(rl.ShaderLocVectorView, rl.GetShaderLocation(*fo.Shader, "viewPos"))
 
 	// Ambient light level
 	ambientLoc := rl.GetShaderLocation(*fo.Shader, "ambient")

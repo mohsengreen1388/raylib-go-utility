@@ -159,7 +159,8 @@ func (lt *Light) SetMaterialTexture(materials []*rl.Material, texture []*rl.Text
 }
 
 func (lt *Light) SetFlashlightTexture(materials []*rl.Material, texure *rl.Texture2D) {
-	lt.Shader.UpdateLocation(rl.LocMapOcclusion, rl.GetShaderLocation(lt.Shader, "flashlight"))
+	
+	lt.Shader.UpdateLocation(rl.ShaderLocMapOcclusion, rl.GetShaderLocation(lt.Shader, "flashlight"))
 	for _, material := range materials {
 		rl.SetMaterialTexture(material, rl.MapOcclusion, *texure)
 	}

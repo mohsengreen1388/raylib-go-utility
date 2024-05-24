@@ -1,18 +1,10 @@
 package main
 
 import (
-	ut "github.com/mohsengreen1388/raylib-go-utility/utility"
+	"github.com/mohsengreen1388/raylib-go-utility/physics/ode"
 	rl "github.com/mohsengreen1388/raylib-go-custom/raylib"
+	ut "github.com/mohsengreen1388/raylib-go-utility/utility"
 )
-
-var LastFrame float32
-var x = 0.0
-var y = 0.0
-var z = -1
-
-var bound rl.BoundingBox
-
-
 
 func main() {
 
@@ -21,36 +13,54 @@ func main() {
 
 	cam := rl.Camera3D{}
 	cam.Fovy = 45
-	cam.Position = rl.Vector3{0, 12, -6}
+	cam.Position = rl.Vector3{0, 5, -6}
 	cam.Up = rl.Vector3{0, 1, 0}
 	cam.Target = rl.Vector3{0, 0, 0}
 	cam.Projection = rl.CameraPerspective
 
-	model := rl.LoadModel("./mouse.glb")
-	modelanm := rl.LoadModelAnimations("./mouse.glb")
+	model := rl.LoadModel("./greenman.glb")
+	modelanm := rl.LoadModelAnimations("./greenman.glb")
+	sword := rl.LoadModel("./greenman_sword.glb")
 
-	posModel := rl.Vector3{}
+	posModel := rl.Vector3{0, 0, 0}
 	move := ut.ControllerModel{}
 
-	move.Init(&model, modelanm, &posModel, &cam.Position, true)
+	cube2 := rl.LoadModelFromMesh(rl.GenMeshCube(1, 1, 1))
 
-	cube2 := rl.LoadModelFromMesh(rl.GenMeshCube(1,1,1))
-	cube2Pos := rl.Vector3{0,1,1}
+	ode.RlBeginConfig()
+	world, space, jointGroup := ode.RlInit(1, ode.NewVector3(0, -1, 0), true, 1, ode.NewVector4(0, 1, 0, 0))
+	//world.SetContactSurfaceLayer(0.0)
+	world.SetCFM(0.01)
+	world.SetERP(0.2)
+	contact := make([]*ode.Contact, 64)
+	mode := ode.SoftCFMCtParam | ode.BounceCtParam
+	TriData := ode.RlGeomTriMeshDataBuildSingleAnm(&model.GetMeshes()[0])
+	TriMesh := ode.RlNewTriMesh(space, &TriData)
+	//	TrimeshBody, _ := ode.RlMeshToDynamic(world, space, &TriMesh, &TriData, 1, ode.NewVector3(0, 1, 0))
+	//bodyMouse, _, _ := ode.RlNewBox(world, space, ode.NewVector3(0.5, 0.5, 0.5), ode.NewVector3(0, 2.5, 0), ode.NewVector3(0.5, 0.5, 0.5), 1, false, false)
 
+	bodyBox, _, _ := ode.RlNewBox(world, space, ode.NewVector3(1, 1, 1), ode.NewVector3(2, 2, 0), ode.NewVector3(1, 1, 1), 1, false, false)
+	ode.RlEndConfig()
+	move.Init(&model, nil, modelanm, &posModel, &cam.Position, true)
 
 	rl.SetTargetFPS(60)
 	for !rl.WindowShouldClose() {
+		ode.RlStep(world, space, jointGroup, 60, ode.RlCollideCallBack(world, 64, *jointGroup, contact, mode, 1), func() {
+			move.AddCollisionByBody(bodyBox, true, 4, 1)
+			move.SyncTransformTheModel()
+		})
+		move.CameraTargetLockTheModel(&cam)
 
-	//	rl.UpdateCamera(&cam,rl.CameraFirstPerson)
-		
-		 move.CameraTargetLockTheModel(&cam)
-		
 		if rl.IsKeyDown(rl.KeyUp) {
-			move.Move(3, 1, ut.AxisCameraZ, rl.Vector2{0.02, 0.02}, rl.Vector3{0, 0, 0}, 0)
+			move.Move(3, 1, ut.AxisCameraZ, rl.Vector2{0.02, 0.02}, rl.Vector3{0, 0, 0})
 		}
 
 		if rl.IsKeyDown(rl.KeyDown) {
-			move.Move(3, 1, ut.AxisCameraZ, rl.Vector2{-0.02, -0.02}, rl.Vector3{0, 0, 1}, 180-0.9)
+			move.Move(3, 1, ut.AxisCameraZ, rl.Vector2{-0.02, -0.02}, rl.Vector3{0, 34.5, 0})
+		}
+
+		if rl.IsKeyDown(rl.KeyLeft) {
+			move.Move(3, 1, ut.AxisCameraX, rl.Vector2{0.02, 0.02}, rl.Vector3{0, 45.5, 0})
 		}
 
 		if rl.IsKeyReleased(rl.KeyUp) || rl.IsKeyReleased(rl.KeyDown) || rl.IsKeyReleased(rl.KeyRight) || rl.IsKeyReleased(rl.KeyLeft) {
@@ -61,24 +71,27 @@ func main() {
 			move.Once()
 		}
 
-		move.OnceRun(0, 1, rl.Vector3{0, 0, 1})
+		move.OnceRun(1, 3)
 
-		move.DefaultLoopAnimtion(2, 1, rl.Vector3{0, 0, 1})
-		
-		bound = rl.NewBoundingBox(rl.Vector3{posModel.X,posModel.Y,posModel.Z},rl.Vector3{posModel.X+0.01,posModel.Y+0.01,posModel.Z+0.01})
-		ch := rl.CheckCollisionBoxes(bound,rl.NewBoundingBox(rl.Vector3{cube2Pos.X,cube2Pos.Y,cube2Pos.Z},rl.Vector3{cube2Pos.X,cube2Pos.Y,cube2Pos.Z}))
-	
-		println(ch)
+		move.DefaultLoopAnimtion(2, 1)
+
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.RayWhite)
 		rl.DrawFPS(0, 0)
 		rl.BeginMode3D(cam)
 		rl.DrawGrid(100, 1)
-		rl.DrawModel(cube2,cube2Pos,1,rl.Blue)
-		rl.DrawModelEx(model, posModel, rl.Vector3{1, 0, 0}, 90, rl.Vector3{0.01, 0.01, 0.01}, rl.RayWhite)
+		move.DrawModelControll(rl.Vector3{0, 0, 0}, 0, rl.Vector3{1, 1, 1}, rl.RayWhite)
+		ode.RlBeginDrawingDebug()
+		ode.RlDrawTriMesh(&TriMesh, rl.Blue)
+		ode.RlDrawBox(&cube2, bodyBox, rl.Vector3{1, 1, 1}, rl.Red)
+		ode.RlEndDrawingDebug()
+
+		//move.DrawSkeletBindPose(posModel, rl.Vector3{0, 0, 0}, 0, 2)
+		move.DrawSkeletAnimtion(1)
+		move.JointModelPostionAndDraw(&sword, 10, 1, 1, rl.Red)
 		rl.EndMode3D()
 		rl.EndDrawing()
 	}
-
+	ode.RlClose(world, space, jointGroup)
 	rl.CloseWindow()
 }

@@ -25,9 +25,9 @@ func main() {
 
 	wa := ut.Wave{}
 
-	wa.Init([]*rl.Material{&cube.Materials[0]}, []*rl.Texture2D{&tx})
+	wa.Init([]*rl.Material{&cube.GetMaterials()[0]}, []*rl.Texture2D{&tx})
 
-	cube.Materials[0].Shader = *wa.Shader
+	cube.GetMaterials()[0].Shader = *wa.Shader
 
 	rl.SetTargetFPS(60)
 	for !rl.WindowShouldClose() {

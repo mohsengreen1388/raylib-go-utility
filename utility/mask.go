@@ -13,7 +13,8 @@ type Mask struct {
 
 func (ma *Mask)Init(){
 	ma.configShader()
-	ma.Shader.UpdateLocation(rl.RL_SHADER_LOC_MAP_EMISSION, rl.GetShaderLocation(*ma.Shader, "mask"))
+	
+	ma.Shader.UpdateLocation(rl.ShaderLocMapEmission, rl.GetShaderLocation(*ma.Shader, "mask"))
 	ma.updateAnimationLoc = rl.GetShaderLocation(*ma.Shader, "frame")
 }
 

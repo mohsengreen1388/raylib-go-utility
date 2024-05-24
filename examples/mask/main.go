@@ -27,9 +27,9 @@ func main() {
 	masks := ut.Mask{}
 
 	masks.Init()
-	masks.SetMapDiffuse([]*rl.Material{&cube.Materials[0]}, []*rl.Texture2D{&txdiff})
+	masks.SetMapDiffuse([]*rl.Material{&cube.GetMaterials()[0]}, []*rl.Texture2D{&txdiff})
 
-	masks.SetMapEmission([]*rl.Material{&cube.Materials[0]}, []*rl.Texture2D{&txMask})
+	masks.SetMapEmission([]*rl.Material{&cube.GetMaterials()[0]}, []*rl.Texture2D{&txMask})
 
 	rl.SetTargetFPS(60)
 	x := 0

@@ -39,12 +39,12 @@ func (ph *PhysicRender) Init() {
 		ph.configShader()
 	}
 
-	ph.Shader.UpdateLocation(rl.LocMapAlbedo, rl.GetShaderLocation(*ph.Shader, "albedoMap"))
-	ph.Shader.UpdateLocation(rl.LocMapMetalness, rl.GetShaderLocation(*ph.Shader, "mraMap"))
-	ph.Shader.UpdateLocation(rl.LocMapNormal, rl.GetShaderLocation(*ph.Shader, "normalMap"))
-	ph.Shader.UpdateLocation(rl.LocMapEmission, rl.GetShaderLocation(*ph.Shader, "emissiveMap"))
-	ph.Shader.UpdateLocation(rl.LocColorDiffuse, rl.GetShaderLocation(*ph.Shader, "albedoColor"))
-	ph.Shader.UpdateLocation(rl.LocVectorView, rl.GetShaderLocation(*ph.Shader, "viewPos"))
+	ph.Shader.UpdateLocation(rl.ShaderLocMapAlbedo, rl.GetShaderLocation(*ph.Shader, "albedoMap"))
+	ph.Shader.UpdateLocation(rl.ShaderLocMapMetalness, rl.GetShaderLocation(*ph.Shader, "mraMap"))
+	ph.Shader.UpdateLocation(rl.ShaderLocMapNormal, rl.GetShaderLocation(*ph.Shader, "normalMap"))
+	ph.Shader.UpdateLocation(rl.ShaderLocMapEmission, rl.GetShaderLocation(*ph.Shader, "emissiveMap"))
+	ph.Shader.UpdateLocation(12, rl.GetShaderLocation(*ph.Shader, "albedoColor"))
+	ph.Shader.UpdateLocation(rl.ShaderLocVectorView, rl.GetShaderLocation(*ph.Shader, "viewPos"))
 
 	ambientColor := rl.Color{R: 122, G: 36, B: 26, A: 100}
 	ambientColorNormalized := rl.NewVector3(float32(ambientColor.R)/255.0, float32(ambientColor.G)/255.0, float32(ambientColor.B)/255.0)
@@ -127,7 +127,7 @@ func (ph *PhysicRender) DrawSphereLoctionLight(li light, color rl.Color) {
 }
 
 func (ph *PhysicRender) AlbedoColorModel(model *rl.Model, color rl.Color) {
-	model.Materials[0].GetMap(rl.MapAlbedo).Color = color
+	model.GetMaterials()[0].GetMap(rl.MapAlbedo).Color = color
 }
 
 func (ph *PhysicRender) EmissiveColor(color rl.Color) {

@@ -145,6 +145,13 @@ func (b Body) Rotation() Matrix3 {
 	return rot
 }
 
+// Rotation returns the orientation represented by a rotation matrix.
+// func (b Body) GetRotation() [16]float32 {
+// 	R := C.dBodyGetRotation(b.c())
+// 	resulte := *(*[1 << 4]float32)(unsafe.Pointer(&R))
+// 	return resulte
+// }
+
 // SetQuaternion sets the orientation represented by a quaternion.
 func (b Body) SetQuaternion(quat Quaternion) {
 	C.dBodySetQuaternion(b.c(), (*C.dReal)(&quat[0]))
@@ -384,6 +391,16 @@ func (b Body) SetMaxAngularSpeed(maxSpeed float64) {
 // MaxAngularSpeed returns the maximum angular speed.
 func (b Body) MaxAngularSpeed() float64 {
 	return float64(C.dBodyGetMaxAngularSpeed(b.c()))
+}
+
+// dBodySetLinearVel
+func (b Body) SetLinearVel(x, y, z float64) {
+	C.dBodySetLinearVel(b.c(), C.dReal(x), C.dReal(y), C.dReal(z))
+}
+
+// dBodySetAngularVel
+func (b Body) SetAngularVel(x, y, z float64) {
+	C.dBodySetAngularVel(b.c(), C.dReal(x), C.dReal(y), C.dReal(z))
 }
 
 // SetGyroModeEnabled sets whether gyroscopic mode is enabled.

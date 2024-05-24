@@ -201,13 +201,19 @@ func (w World) AutoDisableAngularThreshold() float64 {
 }
 
 // SetAutoAutoDisableAverageSamplesCount sets auto disable average sample count.
-func (w World) SetAutoAutoDisableAverageSamplesCount(averageSamplesCount bool) {
-	C.dWorldSetAutoDisableAverageSamplesCount(w.c(), C.unsigned(btoi(averageSamplesCount)))
+func (w World) SetAutoAutoDisableAverageSamplesCount(averageSamplesCount uint) {
+	C.dWorldSetAutoDisableAverageSamplesCount(w.c(), C.unsigned(averageSamplesCount))
 }
 
 // AutoDisableAverageSamplesCount returns the auto disable sample count.
-func (w World) AutoDisableAverageSamplesCount() bool {
-	return C.dWorldGetAutoDisableAverageSamplesCount(w.c()) != 0
+func (w World) AutoDisableAverageSamplesCount() uint {
+	res := C.dWorldGetAutoDisableAverageSamplesCount(w.c())
+	return *(*uint)(unsafe.Pointer(&res))
+}
+
+// dWorldSetAutoDisableFlag
+func (w World) WorldSetAutoDisableFlag(flag int) {
+	C.dWorldSetAutoDisableFlag(w.c(),C.int(flag))
 }
 
 // SetAutoDisableSteps sets the number of auto disable steps.
@@ -376,3 +382,4 @@ func (w World) NewDHingeJoint(group JointGroup) DHingeJoint {
 func (w World) NewTransmissionJoint(group JointGroup) TransmissionJoint {
 	return cToJoint(C.dJointCreateTransmission(w.c(), group.c())).(TransmissionJoint)
 }
+

@@ -65,7 +65,7 @@ func (pa *Particle) UpdateParticles(speed rl.Vector3, lifetimeMin, lifetimeMax i
 func (pa *Particle) DrawParticles(model *rl.Model, texture *rl.Texture2D, scale rl.Vector3) {
 	rl.DisableDepthTest()
 	rl.DisableBackfaceCulling()
-	model.Materials[0].Maps.Texture = *texture
+	model.GetMaterials()[0].Maps.Texture = *texture
 	for i := 0; i < int(pa.MaxParticles); i++ {
 		if pa.Particles[i].Lifetime > 0 {
 			rl.BeginBlendMode(rl.BlendAdditive)
@@ -82,7 +82,7 @@ func (pa *Particle) DrawCircleParicle(speed float32, model *rl.Model, texture *r
 	rl.DisableBackfaceCulling()
 	pa.CircleParicleSpeed += speed
 	moveForeachOther := 0
-	model.Materials[0].Maps.Texture = *texture
+	model.GetMaterials()[0].Maps.Texture = *texture
 	if pa.CircleParicleSpeed >= 10000 {
 		pa.CircleParicleSpeed = 100
 	}

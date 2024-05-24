@@ -1,12 +1,16 @@
 package ode
 
 // #include <ode/ode.h>
+// #include <raylib.h>
 // extern int callTriCallback(dGeomID mesh, dGeomID other, int index);
 // extern int callTriRayCallback(dGeomID mesh, dGeomID ray, int index, dReal u, dReal v);
+// extern dTriMeshDataID TriMeshDataBuildSingle(Mesh plane,float scale);
+// extern dTriMeshDataID TriMeshDataBuildSingleAnm(Mesh plane);
 import "C"
 
 import (
 	"unsafe"
+	rl "github.com/mohsengreen1388/raylib-go-custom/raylib"
 )
 
 var (
@@ -25,6 +29,11 @@ func (t TriMeshData) c() C.dTriMeshDataID {
 	return C.dTriMeshDataID(unsafe.Pointer(t))
 }
 
+var (
+	vertexListMap = map[int]VertexList{}
+	indexListMap  = map[int]TriVertexIndexList{}
+)
+
 // NewTriMeshData returns a new TriMeshData instance.
 func NewTriMeshData() TriMeshData {
 	return cToTriMeshData(C.dGeomTriMeshDataCreate())
@@ -32,13 +41,19 @@ func NewTriMeshData() TriMeshData {
 
 // Destroy destroys the triangle mesh data.
 func (t TriMeshData) Destroy() {
+	delete(vertexListMap, int(t))
+	delete(indexListMap, int(t))
 	C.dGeomTriMeshDataDestroy(t.c())
 }
 
 // Build builds a triangle mesh from the given data.
 func (t TriMeshData) Build(verts VertexList, tris TriVertexIndexList) {
+	delete(vertexListMap, int(t))
+	delete(indexListMap, int(t))
 	C.dGeomTriMeshDataBuildSimple(t.c(), (*C.dReal)(&verts[0][0]), C.int(len(verts)),
-		(*C.dTriIndex)(&tris[0][0]), C.int(len(tris)))
+		(*C.dTriIndex)(&tris[0][0]), C.int(len(tris)*3))
+	vertexListMap[int(t)] = verts // avoid GC mark and sweep
+	indexListMap[int(t)] = tris   // avoid GC mark and sweep
 }
 
 // Preprocess preprocesses the triangle mesh data.
@@ -177,4 +192,22 @@ func (t TriMesh) Point(index int, u, v float64) Vector3 {
 // TriangleCount returns the number of triangles in the mesh.
 func (t TriMesh) TriangleCount() int {
 	return int(C.dGeomTriMeshGetTriangleCount(t.c()))
+}
+
+func RlGeomTriMeshDataBuildSingle(mesh *rl.Mesh,scale float32) TriMeshData {
+	scaleC := C.float(scale)
+	meshC := *(*C.Mesh)(unsafe.Pointer(mesh))
+	res := C.TriMeshDataBuildSingle(meshC,scaleC)
+
+	return *(*TriMeshData)(unsafe.Pointer(&res))
+}
+
+func RlGeomTriMeshDataBuildSingleAnm(mesh *rl.Mesh) TriMeshData {
+	meshC := *(*C.Mesh)(unsafe.Pointer(mesh))
+	res := C.TriMeshDataBuildSingleAnm(meshC)
+	return *(*TriMeshData)(unsafe.Pointer(&res))
+}
+
+func RlNewTriMesh(space Space, triMeshData *TriMeshData) TriMesh {
+	return space.NewTriMesh(*triMeshData)
 }

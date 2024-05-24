@@ -40,7 +40,7 @@ func main() {
 	p.RoughnessValue(0.1)
 	p.AmbientColor(rl.Vector3{1, 1, 1}, 0.2)
 
-	cube.Materials[0].Shader = sx
+	cube.GetMaterials()[0].Shader = sx
 
 	rl.SetTargetFPS(60)
 	for !rl.WindowShouldClose() {

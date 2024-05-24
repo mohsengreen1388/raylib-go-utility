@@ -1011,6 +1011,12 @@ func (j PistonJoint) SetAnchorOffset(pt, delta Vector3) {
 		C.dReal(delta[0]), C.dReal(delta[1]), C.dReal(delta[2]))
 }
 
+// Anchor returns the anchor point for the second body.
+func (j PistonJoint) Anchor() Vector3 {
+	pt := NewVector3()
+	C.dJointGetPistonAnchor(j.c(), (*C.dReal)(&pt[0]))
+	return pt
+}
 // Anchor2 returns the anchor point for the second body.
 func (j PistonJoint) Anchor2() Vector3 {
 	pt := NewVector3()

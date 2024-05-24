@@ -10,7 +10,6 @@ import (
 	"unsafe"
 )
 
-
 // Initialization flags
 const (
 	ManualThreadCleanupIFlag = C.dInitFlagManualThreadCleanup
@@ -41,9 +40,11 @@ type nearCallbackData struct {
 	fn   NearCallback
 }
 
+var nearCallbackDataMap = NewCGOMap()
+
 //export nearCallback
 func nearCallback(data unsafe.Pointer, obj1, obj2 C.dGeomID) {
-	cbData := (*nearCallbackData)(data)
+	cbData := nearCallbackDataMap.Get(int(uintptr(data))).(*nearCallbackData)
 	cbData.fn(cbData.data, cToGeom(obj1), cToGeom(obj2))
 }
 
@@ -216,10 +217,6 @@ func NewTriVertexIndexList(size int, indices ...uint32) TriVertexIndexList {
 
 // PolygonList represents a list of polygon definitions
 type PolygonList []C.uint
-
-func GetConfiguration() string {
-	return C.GoString(C.dGetConfiguration())
-}
 
 // Init initializes ODE.
 func Init(initFlags, allocFlags int) {
