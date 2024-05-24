@@ -41,13 +41,13 @@ func main() {
 
 	bodyBox, _, _ := ode.RlNewBox(world, space, ode.NewVector3(1, 1, 1), ode.NewVector3(2, 2, 0), ode.NewVector3(1, 1, 1), 1, false, false)
 	ode.RlEndConfig()
-	move.Init(&model, nil, modelanm, &posModel, &cam.Position, true)
+	move.Init(&model, nil, modelanm, &posModel, &cam.Position,1,true)
 
 	rl.SetTargetFPS(60)
 	for !rl.WindowShouldClose() {
 		ode.RlStep(world, space, jointGroup, 60, ode.RlCollideCallBack(world, 64, *jointGroup, contact, mode, 1), func() {
 			move.AddCollisionByBody(bodyBox, true, 4, 1)
-			move.SyncTransformTheModel()
+			move.SyncTransformTheModel(1)
 		})
 		move.CameraTargetLockTheModel(&cam)
 
@@ -83,7 +83,7 @@ func main() {
 		move.DrawModelControll(rl.Vector3{0, 0, 0}, 0, rl.Vector3{1, 1, 1}, rl.RayWhite)
 		ode.RlBeginDrawingDebug()
 		ode.RlDrawTriMesh(&TriMesh, rl.Blue)
-		ode.RlDrawBox(&cube2, bodyBox, rl.Vector3{1, 1, 1}, rl.Red)
+		ode.RlDrawBox(&cube2, bodyBox, rl.Vector3{1, 1, 1},1,rl.Red)
 		ode.RlEndDrawingDebug()
 
 		//move.DrawSkeletBindPose(posModel, rl.Vector3{0, 0, 0}, 0, 2)
