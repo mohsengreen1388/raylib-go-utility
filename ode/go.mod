@@ -1,4 +1,4 @@
-module github.com/mohsengreen1388/raylib-go-utility/physics
+module github.com/mohsengreen1388/raylib-go-utility/ode
 
 go 1.21
 
