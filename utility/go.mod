@@ -1,4 +1,4 @@
-module github.com/mohsengreen1388/raylib-go-utility
+module github.com/mohsengreen1388/raylib-go-utility/utility
 
 go 1.21
 
