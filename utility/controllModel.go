@@ -1,7 +1,7 @@
 package utility
 
 import (
-	"github.com/mohsengreen1388/raylib-go-utility/physics/ode"
+	ode "github.com/mohsengreen1388/raylib-go-utility/physics"
 
 	rl "github.com/mohsengreen1388/raylib-go-custom/raylib"
 )
